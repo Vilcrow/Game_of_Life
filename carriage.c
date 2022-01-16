@@ -50,8 +50,8 @@ void move_carriage(const int row, const int col, int c, int *cur_y, int *cur_x)
 		break;
 	}
 	if(*cur_y < 0)
-		*cur_y = row-1;
-	else if(*cur_y > row-1)
+		*cur_y = row-1-msgboxheight;
+	else if(*cur_y > row-1-msgboxheight)
 		*cur_y = 0;
 	if(*cur_x < 0)
 		*cur_x = col-1;
@@ -71,5 +71,7 @@ enum key_value check_key(const int c)
 		return finish;
 	else if(c == key_escape)
 		return esc;
+	else if(c == key_clear)
+		return clrscr;
 	return -1;
 }

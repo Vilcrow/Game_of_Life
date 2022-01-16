@@ -20,4 +20,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef PREPARATION_H_SENTRY
 #define PREPARATION_H_SENTRY
 
+void preparate_env(cell **next, cell **first, const int row, const int col);
+void add_env(cell **next, cell *first, cell *tmp, const int row, const int col);
+enum status is_viable(cell *first, cell *tmp, const int row, const int col);
+enum status get_status(cell *first, const int y, const int x);
+void create_new_generation(cell **next, cell **first,
+							const int row, const int col);
+void clear_list(cell **first);
+
 #endif

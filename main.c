@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "const.h"
 #include "carriage.h"
 #include "cell.h"
+#include "preparation.h"
 
 void start_curses_mode()
 {
@@ -57,8 +58,8 @@ int main(int argc, char **argv)
 			move_carriage(row, col, c, &cur_y, &cur_x);
 			break;
 		case add:
-			if(!is_in_list(cell_zero, cur_y, cur_x)) {
-				add_alive_cell(&cell_zero, cur_y, cur_x);
+			if(FALSE == is_in_list(cell_zero, cur_y, cur_x)) {
+				add_cell(&cell_zero, cur_y, cur_x, alive);
 				show_cell(cur_y, cur_x);
 			}
 			else {
@@ -71,14 +72,25 @@ int main(int argc, char **argv)
 				mvaddstr(row-1, 1, _("Initial conditions aren't set"));
 				move(cur_y, cur_x);
 			}
-			else
-				;
+			else {
+				copy_list(&cell_next, cell_zero);
+				preparate_env(&cell_next, &cell_zero, row, col);
+				create_new_generation(&cell_next, &cell_zero, row, col);
+				show_cells(cell_zero);
+				cur_y = 0;
+				cur_x = 0;
+			}
 			break;
 		case esc:
-			endwin();
-			return 0;
+			is_quit_game = TRUE;
+		case clrscr:
+			clear_list(&cell_zero);
+			clear();
+			cur_y = 0;
+			cur_x = 0;
+			move(0, 0);
+			break;
 		default:
-			mvaddch(1, 1, '*');
 			break;
 		}
 	}

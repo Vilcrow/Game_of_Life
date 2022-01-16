@@ -20,10 +20,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef CELL_H_SENTRY
 #define CELL_H_SENTRY
 
-void add_alive_cell(cell **first, int y, int x);
+void add_cell(cell **first, const int y, const int x, enum status st);
 void rm_cell(cell **first, const int y, const int x);
 void show_cell(const int y, const int x);
 void hide_cell(const int y, const int x);
 char is_in_list(cell *first, const int y, const int x);
+char is_visible(const int row, const int col, const int y, const int x);
+char will_added(cell *first, const int row, const int col,
+				const int y, const int x);
+void show_cells(cell *first);
+void copy_list(cell **to, cell *from);
 
 #endif

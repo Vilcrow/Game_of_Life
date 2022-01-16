@@ -22,14 +22,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "const.h"
 #include "cell.h"
 
-void add_alive_cell(cell **first, int y, int x)
+void add_cell(cell **first, const int y, const int x, enum status st)
 {
 	cell *tmp = NULL;
 	cell *aux = *first;
 	tmp = malloc(sizeof(cell));
 	tmp->y = y;
 	tmp->x = x;
-	tmp->st = alive;
+	tmp->st = st;
 	tmp->prev = NULL;
 	tmp->next = NULL;
 	if(*first == NULL)
@@ -43,10 +43,14 @@ void add_alive_cell(cell **first, int y, int x)
 				if(tmp->x > aux->x)
 					aux = aux->next;
 				else if(tmp->x < aux->x) {
+					if(aux != *first) {
+						tmp->prev = aux->prev;
+						aux->prev->next = tmp;
+					}
+					else
+						*first = tmp;
 					aux->prev = tmp;
 					tmp->next = aux;
-					aux->prev->next = tmp;
-					tmp->prev = aux->prev;
 					break;
 				}
 			}
@@ -130,4 +134,41 @@ char is_in_list(cell *first, const int y, const int x)
 			tmp = tmp->next;
 	}
 	return FALSE;
+}
+
+char is_visible(const int row, const int col, const int y, const int x)
+{
+	if(y < 0 || y > row-1-msgboxheight || x < 0 || x > col-1)
+		return FALSE;
+	else
+		return TRUE;
+}
+
+char will_added(cell *first, const int row, const int col,
+				const int y, const int x)
+{
+	if((TRUE == is_visible(row, col, y, x)) && (FALSE == is_in_list(first, y, x)))
+		return TRUE;
+	else
+		return FALSE;
+}
+
+void show_cells(cell *first)
+{
+	cell *tmp = first;
+	clear();
+	while(tmp != NULL) {
+		mvaddch(tmp->y, tmp->x, cell_char);
+		tmp = tmp->next;
+	}
+	move(0, 0);
+}
+
+void copy_list(cell **to, cell *from)
+{
+	cell *tmp = from;
+	while(tmp != NULL) {
+		add_cell(to, tmp->y, tmp->x, tmp->st);
+		tmp = tmp->next;
+	}	
 }

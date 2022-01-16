@@ -35,8 +35,10 @@ enum {key_right = 'l'};
 enum {key_enter = 10};
 enum {key_escape = 27};
 enum {key_finish = 'f'};
+enum {key_clear = 'c'};
 enum status {dead, alive};
-enum key_value {mv, add, finish, esc};
+enum key_value {mv, add, finish, esc, clrscr};
+enum {msgboxheight = 2};
 
 typedef struct one_cell {
 	int y;
