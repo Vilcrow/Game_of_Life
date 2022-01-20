@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall
-SRCMODULES = carriage.c cell.c colpairs.c preparation.c
+SRCMODULES = carriage.c cell.c colpairs.c msgbox.c preparation.c renderer.c
 OBJMODULES = $(SRCMODULES:.c=.o)
 
 %.o: %.c %.h

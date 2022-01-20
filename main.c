@@ -23,37 +23,42 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "carriage.h"
 #include "cell.h"
 #include "preparation.h"
+#include "msgbox.h"
+#include "renderer.h"
 
 void start_curses_mode()
 {
 	initscr();
-	if(!has_colors()) {
-		endwin();
-		fprintf(stderr, _("Your terminal don't support colors\n"));
-		exit(1);	
-	}
 	cbreak();
 	keypad(stdscr, 1);
 	noecho();
-	start_color();
 }
 
 int main(int argc, char **argv)
 {
-	char is_quit_game = 0;	/*stay in the game*/
+	char is_quit_game = FALSE;	/*stay in the game*/
 	int cur_y = 0;
 	int cur_x = 0;
 	int row, col;
 	int c;
-	enum key_value kv;
-	cell *cell_zero = NULL;
-	cell *cell_next = NULL;
+	enum speed spd = one;
+	enum key_value key;
+	cell *cell_zero = NULL;	/*main list*/
+	cell *cell_next = NULL;	/*temporary list*/
+	cell *cell_src = NULL;	/*to save the source list*/
 	start_curses_mode();
 	getmaxyx(stdscr, row, col);
+	if(!has_colors()) {
+		show_msg(row, col, _("Your terminal don't support colors\n"));
+	}
+	else {
+		show_msg(row, col, _("Your terminal support colors\n"));
+		start_color();
+	}
 	while(!is_quit_game) {
 		c = getch();
-		kv = check_key(c);
-		switch(kv) {
+		key = check_key(c);
+		switch(key) {
 		case mv:
 			move_carriage(row, col, c, &cur_y, &cur_x);
 			break;
@@ -69,14 +74,11 @@ int main(int argc, char **argv)
 			break;
 		case finish:
 			if(cell_zero == NULL) {
-				mvaddstr(row-1, 1, _("Initial conditions aren't set"));
+				show_msg(row, col, _("Initial conditions aren't set"));
 				move(cur_y, cur_x);
 			}
 			else {
-				copy_list(&cell_next, cell_zero);
-				preparate_env(&cell_next, &cell_zero, row, col);
-				create_new_generation(&cell_next, &cell_zero, row, col);
-				show_cells(cell_zero);
+				automatic_rendering(cell_zero, spd, row, col);
 				cur_y = 0;
 				cur_x = 0;
 			}
@@ -89,6 +91,8 @@ int main(int argc, char **argv)
 			cur_y = 0;
 			cur_x = 0;
 			move(0, 0);
+			break;
+		case src:
 			break;
 		default:
 			break;

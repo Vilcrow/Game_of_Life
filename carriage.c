@@ -73,5 +73,7 @@ enum key_value check_key(const int c)
 		return esc;
 	else if(c == key_clear)
 		return clrscr;
+	else if(c == key_source)
+		return src;
 	return -1;
 }

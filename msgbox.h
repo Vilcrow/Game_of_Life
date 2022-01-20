@@ -17,42 +17,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------
 */
 
-#ifndef CONST_H_SENTRY
-#define CONST_H_SENTRY
+#ifndef MSGBOX_H_SENTRY
+#define MSGBOX_H_SENTRY
 
-#define _(STR) (STR)
-#define N_(STR) (STR)	/*don't translate*/
-
-#define TRUE 1
-#define FALSE 0
-
-enum { cell_char = '#' };
-
-enum { key_up       = 'k'  };
-enum { key_down     = 'j'  };
-enum { key_left     = 'h'  };
-enum { key_right    = 'l'  };
-enum { key_enter    = 10   };
-enum { key_escape   = 27   };
-enum { key_finish   = 'f'  };
-enum { key_clear    = 'c'  };
-enum { key_source   = 's'  };
-enum { key_pause    = ' '  };
-enum { msgboxheight = 2    };
-enum { msgmaxlen    = 80   };
-enum { pathmaxlen   = 60   };
-enum { timeout_min  = 500  };
-enum status    { dead, alive };
-enum key_value { mv, add, finish, esc, clrscr, src };
-enum speed     { zero, one, two, three, four, five };
-
-typedef struct one_cell {
-	int y;
-	int x;
-	enum status st;
-	struct one_cell *prev;
-	struct one_cell *next;
-} cell;
-
+void show_msg(const int row, const int col, const char *message);
 
 #endif

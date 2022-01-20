@@ -21,6 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <ncurses.h>
 #include "const.h"
 #include "cell.h"
+#include "preparation.h"
 
 void add_cell(cell **first, const int y, const int x, enum status st)
 {
@@ -161,11 +162,14 @@ void show_cells(cell *first)
 		mvaddch(tmp->y, tmp->x, cell_char);
 		tmp = tmp->next;
 	}
+	refresh();
 	move(0, 0);
 }
 
 void copy_list(cell **to, cell *from)
 {
+	if(*to != NULL)	/*list is not empty*/
+		clear_list(to);
 	cell *tmp = from;
 	while(tmp != NULL) {
 		add_cell(to, tmp->y, tmp->x, tmp->st);
