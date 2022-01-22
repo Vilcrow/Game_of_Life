@@ -67,13 +67,17 @@ enum key_value check_key(const int c)
 		return mv;
 	else if(c == key_enter)
 		return add;
-	else if(c == key_finish)
-		return finish;
 	else if(c == key_escape)
 		return esc;
 	else if(c == key_clear)
 		return clrscr;
-	else if(c == key_source)
-		return src;
+	else if(c == key_run)
+		return run;
+	else if(c == key_copy)
+		return svcl;
+	else if(c == key_speed)
+		return speed;
+	else if(c == key_zero)
+		return mkzc;
 	return -1;
 }

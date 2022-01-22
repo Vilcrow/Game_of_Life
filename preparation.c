@@ -47,7 +47,7 @@ void add_env(cell **next, cell *first, cell *tmp, const int row, const int col)
 			cur_x = tmp->x +dx;
 			if(will_added(first, row, col, cur_y, cur_x))
 				if(FALSE == is_in_list(*next, cur_y, cur_x))
-					add_cell(next, cur_y, cur_x, dead);
+					add_cell(next, cur_y, cur_x, 0, dead);
 			++dx;
 		}
 		dx = -1;
@@ -107,7 +107,7 @@ void create_new_generation(cell **next, cell **first, const int row, const int c
 	cell *tmp = *first;
 	while(tmp != NULL) {
 		if(alive == is_viable(*first, tmp, row, col)) {
-			add_cell(next, tmp->y, tmp->x, alive);
+			add_cell(next, tmp->y, tmp->x, tmp->gen, alive);
 		}
 		tmp = tmp->next;
 	}
@@ -115,6 +115,7 @@ void create_new_generation(cell **next, cell **first, const int row, const int c
 	*first = *next;
 	*next = NULL;
 	clear_list(&tmp);
+	update_generation_num(*first);
 }
 
 void clear_list(cell **first)
@@ -124,5 +125,14 @@ void clear_list(cell **first)
 		*first = tmp->next;
 		free(tmp);
 		tmp = *first;
+	}
+}
+
+void update_generation_num(cell *first)
+{
+	cell *tmp = first;
+	while(tmp != NULL) {
+		++tmp->gen;
+		tmp = tmp->next;
 	}
 }

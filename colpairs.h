@@ -21,5 +21,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #define COLPAIRS_H_SENTRY
 
 void set_color_pairs();
+enum color_pairs get_color_pair(const unsigned int gen);
 
 #endif

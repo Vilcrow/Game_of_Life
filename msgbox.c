@@ -23,7 +23,34 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 void show_msg(const int row, const int col, const char *message)
 {
-	move(row-msgboxheight, 0);
+	clear_msg_line(row, col);
+	move(row-1, 0);
+	attrset(COLOR_PAIR(cp_gb));
 	addstr(message);
+	attroff(COLOR_PAIR(cp_gb));
 	move(0, 0);
+}
+
+void clear_msg_line(const int row, const int col)
+{
+	int j;
+	for(j = 0; j < col; ++j)
+		mvaddch(row-1, j, ' ');
+}
+
+void show_settings(const char mode, const enum speed spd, const int row,
+					const int cur_y, const int cur_x)
+{
+	attrset(COLOR_PAIR(cp_rb));
+	mvprintw(row-msgboxheight, 0, "Mode: %c | Speed: %d ", mode, spd);
+	attroff(COLOR_PAIR(cp_rb));
+	move(cur_y, cur_x);
+}
+
+char change_mode(char mode)
+{
+	if(mode == ed_mode)
+		return sim_mode;
+	else
+		return ed_mode;
 }

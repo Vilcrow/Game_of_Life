@@ -27,5 +27,6 @@ enum status get_status(cell *first, const int y, const int x);
 void create_new_generation(cell **next, cell **first,
 							const int row, const int col);
 void clear_list(cell **first);
+void update_generation_num(cell *first);
 
 #endif

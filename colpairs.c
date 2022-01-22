@@ -17,9 +17,25 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------
 */
 
+#include <ncurses.h>
+#include "const.h"
 #include "colpairs.h"
 
 void set_color_pairs()
 {
+	init_pair(cp_wb, COLOR_WHITE, COLOR_BLACK);
+	init_pair(cp_yb, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(cp_gb, COLOR_GREEN, COLOR_BLACK);
+	init_pair(cp_cb, COLOR_CYAN, COLOR_BLACK);
+	init_pair(cp_bb, COLOR_BLUE, COLOR_BLACK);
+	init_pair(cp_mb, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(cp_rb, COLOR_RED, COLOR_BLACK);
+}
 
+enum color_pairs get_color_pair(const unsigned int gen)
+{
+	if(gen > cp_rb)
+		return cp_rb;
+	else
+		return gen;
 }

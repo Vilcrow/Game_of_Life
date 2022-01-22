@@ -27,6 +27,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #define FALSE 0
 
 enum { cell_char = '#' };
+enum { ed_mode   = 'E' };
+enum { sim_mode  = 'S' };
 
 enum { key_up       = 'k'  };
 enum { key_down     = 'j'  };
@@ -34,21 +36,30 @@ enum { key_left     = 'h'  };
 enum { key_right    = 'l'  };
 enum { key_enter    = 10   };
 enum { key_escape   = 27   };
-enum { key_finish   = 'f'  };
-enum { key_clear    = 'c'  };
-enum { key_source   = 's'  };
+enum { key_clear    = 'C'  };
+enum { key_speed    = 's'  };
 enum { key_pause    = ' '  };
+enum { key_copy     = 'c'  };
+enum { key_run      = 'r'  };
+enum { key_zero     = 'z'  };
 enum { msgboxheight = 2    };
 enum { msgmaxlen    = 80   };
 enum { pathmaxlen   = 60   };
-enum { timeout_min  = 500  };
-enum status    { dead, alive };
-enum key_value { mv, add, finish, esc, clrscr, src };
-enum speed     { zero, one, two, three, four, five };
+enum { timeout_min  = 300  };
+
+enum status
+     { dead, alive };
+enum key_value
+     { mv, add, run, esc, clrscr, mkzc, speed, svcl};
+enum speed
+     { spd_zero, spd_one, spd_two, spd_three, spd_four, spd_five, spd_max };
+enum color_pairs
+     { cp_wb, cp_yb, cp_gb, cp_cb, cp_bb, cp_mb, cp_rb };
 
 typedef struct one_cell {
 	int y;
 	int x;
+	unsigned int gen;
 	enum status st;
 	struct one_cell *prev;
 	struct one_cell *next;

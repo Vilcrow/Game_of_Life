@@ -19,5 +19,6 @@ deps.mk: $(SRCMODULES)
 run: gameoflife
 				./gameoflife
 
-clean: rm -f *.o gameoflife
+clean:
+		rm -f *.o gameoflife
 

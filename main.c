@@ -22,8 +22,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "const.h"
 #include "carriage.h"
 #include "cell.h"
-#include "preparation.h"
+#include "colpairs.h"
 #include "msgbox.h"
+#include "preparation.h"
 #include "renderer.h"
 
 void start_curses_mode()
@@ -36,63 +37,82 @@ void start_curses_mode()
 
 int main(int argc, char **argv)
 {
-	char is_quit_game = FALSE;	/*stay in the game*/
 	int cur_y = 0;
 	int cur_x = 0;
 	int row, col;
 	int c;
-	enum speed spd = one;
+	char mode = ed_mode;
+	enum speed spd = spd_zero;
 	enum key_value key;
-	cell *cell_zero = NULL;	/*main list*/
-	cell *cell_next = NULL;	/*temporary list*/
-	cell *cell_src = NULL;	/*to save the source list*/
+	cell *cell_zero = NULL;
+	cell *cell_current = NULL;
 	start_curses_mode();
 	getmaxyx(stdscr, row, col);
 	if(!has_colors()) {
-		show_msg(row, col, _("Your terminal don't support colors\n"));
+		show_msg(row, col, _("Your terminal don't support colors"));
 	}
 	else {
-		show_msg(row, col, _("Your terminal support colors\n"));
 		start_color();
+		set_color_pairs();
 	}
-	while(!is_quit_game) {
-		c = getch();
+	show_msg(row, col, _("ENTER - add/remove a cell | 'r' - run the simulation"));
+	show_settings(mode, spd, row, cur_y, cur_x);
+	while((c = getch()) != key_escape) {
 		key = check_key(c);
 		switch(key) {
 		case mv:
 			move_carriage(row, col, c, &cur_y, &cur_x);
 			break;
 		case add:
-			if(FALSE == is_in_list(cell_zero, cur_y, cur_x)) {
-				add_cell(&cell_zero, cur_y, cur_x, alive);
+			if(FALSE == is_in_list(cell_current, cur_y, cur_x)) {
+				add_cell(&cell_current, cur_y, cur_x, 0, alive);
 				show_cell(cur_y, cur_x);
 			}
 			else {
-				rm_cell(&cell_zero, cur_y, cur_x);
+				rm_cell(&cell_current, cur_y, cur_x);
 				hide_cell(cur_y, cur_x);
 			}
 			break;
-		case finish:
-			if(cell_zero == NULL) {
+		case run:
+			if(cell_current == NULL) {
 				show_msg(row, col, _("Initial conditions aren't set"));
 				move(cur_y, cur_x);
 			}
 			else {
-				automatic_rendering(cell_zero, spd, row, col);
+				show_msg(row, col, _("Simulation | 'SPACE' - stop the simulation"));
+				mode = change_mode(mode);
+				show_settings(mode, spd, row, cur_y, cur_x);
+				render_result(&cell_current, spd, row, col);
+				mode = change_mode(mode);
 				cur_y = 0;
 				cur_x = 0;
+				show_msg(row, col, _("ENTER - add/remove a cell | 'r' - run the simulation"));
+				show_settings(mode, spd, row, cur_y, cur_x);
+				move(0, 0);
 			}
 			break;
-		case esc:
-			is_quit_game = TRUE;
 		case clrscr:
-			clear_list(&cell_zero);
-			clear();
+			clear_list(&cell_current);
+			clear_field(row, col);
 			cur_y = 0;
 			cur_x = 0;
 			move(0, 0);
 			break;
-		case src:
+		case mkzc:	/*make the cell_zero current*/
+			copy_list(&cell_current, cell_zero);
+			show_cells(cell_current, row, col);
+			cur_y = 0;
+			cur_x = 0;
+			move(0, 0);
+			break;
+		case svcl:	/*save current list to cell_zero*/
+			copy_list(&cell_zero, cell_current);
+			break;
+		case speed:
+			++spd;
+			if(spd > spd_max)
+				spd = spd_zero;
+			show_settings(mode, spd, row, cur_y, cur_x);
 			break;
 		default:
 			break;

@@ -20,8 +20,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef RENDERER_H_SENTRY
 #define RENDERER_H_SENTRY
 
-void automatic_rendering(cell *first, enum speed spd, const int row,
-														const int col);
+void render_result(cell **first, enum speed spd, const int row, const int col);
 char are_lists_same(cell *src, cell *cmp);
+void automatic_rendering(cell **first, const int row, const int col);
+void render_one_step(cell **first, const int row, const int col);
+void clear_field(const int row, const int col);
 
 #endif

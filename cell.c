@@ -17,19 +17,23 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------
 */
 
-#include <stdlib.h>
 #include <ncurses.h>
+#include <stdlib.h>
 #include "const.h"
 #include "cell.h"
+#include "colpairs.h"
 #include "preparation.h"
+#include "renderer.h"
 
-void add_cell(cell **first, const int y, const int x, enum status st)
+void add_cell(cell **first, const int y, const int x, const unsigned int gen,
+															enum status st)
 {
 	cell *tmp = NULL;
 	cell *aux = *first;
 	tmp = malloc(sizeof(cell));
 	tmp->y = y;
 	tmp->x = x;
+	tmp->gen = gen;
 	tmp->st = st;
 	tmp->prev = NULL;
 	tmp->next = NULL;
@@ -154,12 +158,16 @@ char will_added(cell *first, const int row, const int col,
 		return FALSE;
 }
 
-void show_cells(cell *first)
+void show_cells(cell *first, const int row, const int col)
 {
 	cell *tmp = first;
-	clear();
+	clear_field(row, col);
+	enum color_pairs cp;
 	while(tmp != NULL) {
+		cp = get_color_pair(tmp->gen);
+		attrset(COLOR_PAIR(cp));
 		mvaddch(tmp->y, tmp->x, cell_char);
+		attroff(COLOR_PAIR(cp));
 		tmp = tmp->next;
 	}
 	refresh();
@@ -172,7 +180,7 @@ void copy_list(cell **to, cell *from)
 		clear_list(to);
 	cell *tmp = from;
 	while(tmp != NULL) {
-		add_cell(to, tmp->y, tmp->x, tmp->st);
+		add_cell(to, tmp->y, tmp->x, tmp->gen, tmp->st);
 		tmp = tmp->next;
 	}	
 }
