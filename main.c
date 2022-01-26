@@ -44,10 +44,13 @@ int main(int argc, char **argv)
 	char mode = ed_mode;
 	enum speed spd = spd_zero;
 	enum key_value key;
+	char path[pathmaxlen];
 	cell *cell_zero = NULL;
 	cell *cell_current = NULL;
 	start_curses_mode();
 	getmaxyx(stdscr, row, col);
+	if(argc > 1)
+		check_command_line_arg(argc, argv, &cell_current, row, col);
 	if(!has_colors()) {
 		show_msg(row, col, _("Your terminal don't support colors"));
 	}
@@ -113,6 +116,14 @@ int main(int argc, char **argv)
 			if(spd > spd_max)
 				spd = spd_zero;
 			show_settings(mode, spd, row, cur_y, cur_x);
+			break;
+		case write:
+			write_to_file(cell_current, row, col);
+			break;
+		case read:
+			get_path(path, row, col);
+			read_from_file(&cell_current, path, row, col);
+			show_cells(cell_current, row, col);
 			break;
 		default:
 			break;

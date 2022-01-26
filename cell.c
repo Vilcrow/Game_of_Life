@@ -119,7 +119,7 @@ void rm_cell(cell **first, const int y, const int x)
 
 void hide_cell(const int y, const int x)
 {
-	mvaddch(y, x, ' ');
+	mvaddch(y, x, empty_char);
 	move(y, x);
 }
 

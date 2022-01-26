@@ -25,5 +25,9 @@ char are_lists_same(cell *src, cell *cmp);
 void automatic_rendering(cell **first, const int row, const int col);
 void render_one_step(cell **first, const int row, const int col);
 void clear_field(const int row, const int col);
+void write_to_file(cell *first, const int row, const int col);
+void read_from_file(cell **first, const char *path, const int row,
+													const int col);
+void get_path(char *path, const int row, const int col);
 
 #endif

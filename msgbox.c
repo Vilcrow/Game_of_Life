@@ -35,7 +35,7 @@ void clear_msg_line(const int row, const int col)
 {
 	int j;
 	for(j = 0; j < col; ++j)
-		mvaddch(row-1, j, ' ');
+		mvaddch(row-1, j, empty_char);
 }
 
 void show_settings(const char mode, const enum speed spd, const int row,

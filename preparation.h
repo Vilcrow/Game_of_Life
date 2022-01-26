@@ -28,5 +28,10 @@ void create_new_generation(cell **next, cell **first,
 							const int row, const int col);
 void clear_list(cell **first);
 void update_generation_num(cell *first);
+void check_command_line_arg(const int argc, char **argv, cell **current,
+							const int row, const int col);
+void show_help_page();
+char argv_type(const char *string);
+char string_comparison(const char *pattern, const char *string);
 
 #endif

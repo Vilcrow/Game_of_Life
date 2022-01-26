@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "renderer.h"
 #include "cell.h"
 #include "preparation.h"
+#include "msgbox.h"
 
 void render_result(cell **first, enum speed spd, const int row, const int col)
 {
@@ -82,5 +83,107 @@ void clear_field(const int row, const int col)
 	int i, j;
 	for(i = 0; i < row-msgboxheight; ++i)
 		for(j = 0; j < col; ++j)
-			mvaddch(i, j, ' ');
+			mvaddch(i, j, empty_char);
+}
+
+void write_to_file(cell *first, const int row, const int col)
+{
+	FILE *to;
+	int i, j;
+	char path[pathmaxlen];
+	get_path(path, row, col);
+	if(path[0] != '\0') {
+		to = fopen(path, "w");
+		if(!to) {
+			show_msg(row, col, _("Failed to write"));
+		}
+		else {
+			for(i = 0; i < row-msgboxheight; ++i) {
+				for(j = 0; j < col; ++j) {
+					if(TRUE == is_in_list(first, i, j))
+						fputc(cell_char, to);
+					else
+						fputc(empty_char, to);
+				}
+				fputc('\n', to);
+			}	
+			fclose(to);
+			show_msg(row, col, _("Done"));
+		}
+	}
+	else
+		show_msg(row, col, _("Failed to write"));
+}
+
+void read_from_file(cell **first, const char *path, const int row,
+													const int col)
+{
+	FILE *from;
+	int i, j, c;
+	char line_end;
+	if(path[0] != '\0') {
+		from = fopen(path, "r");
+		if(!from) {
+			show_msg(row, col, _("Failed to read"));
+		}
+		else {
+			clear_list(first);
+			for(i = 0; i < row-msgboxheight; ++i) {
+				for(j = 0; j <= col; ++j) {
+					line_end = FALSE;
+					c = fgetc(from);
+					if(c == '\n') {
+						line_end = TRUE;
+						break;
+					}
+					else if(c == EOF)
+						break;	
+					else if(c != empty_char) {
+						add_cell(first, i, j, 0, alive);
+					}
+				}
+				if(c == EOF)
+					break;
+				if(!line_end) {	/*line from the file more window width*/
+					while((c = fgetc(from)) != '\n') {
+						;
+					}
+				}
+			}
+			fclose(from);
+			show_msg(row, col, _("Done"));
+		}
+	}
+	else
+		show_msg(row, col, _("Canceled"));
+}
+
+void get_path(char *path, const int row, const int col) /*need fix*/
+{
+	int c;
+	int i = 0;
+	clear_msg_line(row, col);
+	move(row-1, 0);
+	echo();
+	while((c = getch()) != key_enter) {
+		if(c == key_escape) {
+			noecho();
+			path[0] = '\0';
+			break;
+		}
+		else if(c == KEY_BACKSPACE) {
+			mvaddch(row-1, i-1, empty_char);
+			move(row-1, i-1);
+			--i;
+			if(i < 0) {
+				i = 0;
+			}
+		}
+		else if((c >= 32 && c <= 126) && (i < pathmaxlen-1)) {
+			path[i] = c;
+			++i;	
+		}
+	}
+	noecho();
+	path[i] = '\0';
 }

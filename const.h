@@ -26,15 +26,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #define TRUE 1
 #define FALSE 0
 
-enum { cell_char = '#' };
-enum { ed_mode   = 'E' };
-enum { sim_mode  = 'S' };
+enum { help_char    = 'h'  };
+enum { cell_char    = 'o'  };
+enum { empty_char   = ' '  };
+enum { ed_mode      = 'E'  };
+enum { sim_mode     = 'S'  };
 
+enum { key_write    = 'W'  };
+enum { key_read     = 'R'  };
 enum { key_up       = 'k'  };
 enum { key_down     = 'j'  };
 enum { key_left     = 'h'  };
 enum { key_right    = 'l'  };
-enum { key_enter    = 10   };
+enum { key_enter    = '\n' };
 enum { key_escape   = 27   };
 enum { key_clear    = 'C'  };
 enum { key_speed    = 's'  };
@@ -44,17 +48,19 @@ enum { key_run      = 'r'  };
 enum { key_zero     = 'z'  };
 enum { msgboxheight = 2    };
 enum { msgmaxlen    = 80   };
-enum { pathmaxlen   = 60   };
+enum { pathmaxlen   = 71   };
 enum { timeout_min  = 300  };
 
 enum status
      { dead, alive };
 enum key_value
-     { mv, add, run, esc, clrscr, mkzc, speed, svcl};
+     { mv, add, run, esc, clrscr, mkzc, speed, svcl, write, read};
 enum speed
      { spd_zero, spd_one, spd_two, spd_three, spd_four, spd_five, spd_max };
 enum color_pairs
      { cp_wb, cp_yb, cp_gb, cp_cb, cp_bb, cp_mb, cp_rb };
+enum clargv
+	 { help, man, pattern, file };
 
 typedef struct one_cell {
 	int y;

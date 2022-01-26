@@ -1,0 +1,23 @@
++------------------------+
+| Game of life           |
++------------------------+
+
+1. About
+
+2. Rules
+
+3. Modes
+	3.1. Editing mode
+		3.1.1 Moving
+			UP, k - go up.
+			DOWN, j - go down.
+			LEFT, h - go left.
+			RIGHT, l - go right.
+		ENTER - add/remove cell in current carriage's position.	
+		'c' - copy current list to zero-list.
+		'z' - make zero-list current.
+		'C' - clear current list and field.
+		'r' - run the simulation.
+		's' - change the speed of simulation.
+	3.2. Rendering mode
+		SPACE - stop the simulation and go back to editing mode.

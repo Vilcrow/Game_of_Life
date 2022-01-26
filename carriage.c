@@ -79,5 +79,9 @@ enum key_value check_key(const int c)
 		return speed;
 	else if(c == key_zero)
 		return mkzc;
+	else if(c == key_write)
+		return write;
+	else if(c == key_read)
+		return read;
 	return -1;
 }
