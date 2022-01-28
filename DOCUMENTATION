@@ -1,23 +1,46 @@
-+------------------------+
-| Game of life           |
-+------------------------+
-
-1. About
-
-2. Rules
-
-3. Modes
-	3.1. Editing mode
-		3.1.1 Moving
-			UP, k - go up.
-			DOWN, j - go down.
-			LEFT, h - go left.
-			RIGHT, l - go right.
-		ENTER - add/remove cell in current carriage's position.	
-		'c' - copy current list to zero-list.
-		'z' - make zero-list current.
-		'C' - clear current list and field.
-		'r' - run the simulation.
-		's' - change the speed of simulation.
-	3.2. Rendering mode
-		SPACE - stop the simulation and go back to editing mode.
++-------------------------------------------+
+| Game of life (Conway's Game of Life)      |
+| by S.V.I. 'Vilcrow' <vilcrow.net>         |
++-------------------------------------------+
+|                  Rules                    |
++-------------------------------------------+
+|1.Any live cell with two or three live     |
+|  neighbours survives.                     |
+|2.Any dead cell with three live neighbours |
+|  becomes a live cell.                     |
+|3.All other living cells die in the next   |
+|  generation. Similarly,                   |
+|  all other dead cells stay dead.          |
++-------------------------------------------+
+|                --Modes--                  |
++-------------------------------------------+
+|                 Editing                   |
++-------------------------------------------+
+| m       | show this manual                |
+| s       | change the speed of simulation  |
+| r       | run the simulation              |
+| ESC     | quit                            |
+|                 CARRIAGE                  |
+| h/LEFT  | move the to the left            |
+| j/DOWN  | move the to the down            |
+| k/UP    | move the to the up              |
+| l/RIGHT | move the to the right           |
+| f       | move to the first cell          |
+|                  CELLS                    |
+| ENTER   | add/remove cell                 |
+| H       | move all cells to the left      |
+| J       | move all cells to the down      |
+| K       | move all cells to the up        |
+| L       | move all cells to the right     |
+| c       | copy current list to zero-list  |
+| C       | clear current list and field    |
+| z       | make zero-list current          |
+| P       | show the list of patterns       |
+| p       | open pattern <name>             |
+| R       | read file from <path>           |
+| W       | write current field to <file>   |
++-------------------------------------------+
+|                Rendering                  |
++-------------------------------------------+
+| SPACE   | stop the simulation             |
++-------------------------------------------+

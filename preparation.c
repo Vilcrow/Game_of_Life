@@ -17,12 +17,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------
 */
 
+#include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "const.h"
 #include "preparation.h"
 #include "cell.h"
 #include "renderer.h"
+#include "msgbox.h"
 
 void preparate_env(cell **next, cell **first, const int row, const int col)
 {
@@ -139,76 +141,46 @@ void update_generation_num(cell *first)
 	}
 }
 
-void check_command_line_arg(const int argc, char **argv, cell **current,
-							const int row, const int col)
+void show_manual(const int row, const int col)
 {
-	int type;
-	if(argc > 3) {
-		printf(_("Too many arguments.\n"));
-		exit(1);
+	FILE *manual;
+	char *path = "DOCUMENTATION";
+	int i, j, c;
+	char end_of_line;
+	manual = fopen(path, "r");
+	if(!manual) {
+		show_msg(row, col, _("Manual not found.\
+                              Check of the integrity of the game files."));
 	}
-	if(argc > 1) {
-		type = argv_type(argv[1]);
-		switch(type) {
-		case -1:
-			printf(_("Invalid option '%s'. Try 'gameoflife -h' for more information.\n"), argv[1]);
-			exit(2);
-			break;
-		case help:
-			show_help_page();
-			exit(0);
-			break;
-		case file:
-			read_from_file(current, argv[2], row, col);
-			show_cells(*current, row, col);
-			break;
-		case man:
-			break;
-		case pattern:
-			break;
+	else {
+		clear_field(row, col);
+		attrset(COLOR_PAIR(cp_gb));
+		for(i = 0; i < row; ++i) {
+			for(j = 0; j <= col; ++j) {
+				end_of_line = FALSE;
+				c = fgetc(manual);
+				if(c == '\n' || c == EOF) {
+					end_of_line = TRUE;
+					break;
+				}
+				mvaddch(i, j, c);
+			}
+			if(c == EOF)
+				break;
+			if(!end_of_line) {
+				while(c != '\n') {
+					c = fgetc(manual);
+				}
+			}
 		}
+		fclose(manual);
+		attroff(COLOR_PAIR(cp_gb));
+		show_msg(row, col, _("ESC - back to editing mode"));
+		curs_set(0);
+		while((c = getch()) != key_escape) {
+			;
+		}
+		clear_msg_line(row, col);
+		curs_set(1);
 	}
 }
-
-void show_help_page()
-{
-	printf(_("Available commands:\n"));
-	printf(_("-h\t\t\tDisplay help\n"));
-	printf(_("-m\t\t\tOpen manual\n"));
-	printf(_("-f [name]\t\tOpen the specified file\n"));
-	printf(_("-p [name]\t\tOpen the specified pattern\n"));
-}
-
-char argv_type(const char *string)
-{
-	char shelp[] = "-h";
-	char sman[] = "-m";
-	char spattern[] = "-p";
-	char sfile[] = "-f";
-	if(TRUE == string_comparison(shelp, string))
-		return help;
-	else if(TRUE == string_comparison(sman, string))
-		return man;
-	else if(TRUE == string_comparison(spattern, string))
-		return pattern;
-	else if(TRUE == string_comparison(sfile, string))
-		return file;
-	else
-		return -1;
-}
-
-char string_comparison(const char *pattern, const char *string)
-{
-	int i = 0;
-	while(pattern[i] != '\0' && string[i] != '\0') {
-		if(pattern[i] == string[i])
-			++i;
-		else
-			return FALSE;
-	}
-	if((pattern[i] == '\0' && string[i] != '\0') ||
-		(string[i] == '\0' && pattern[i] != '\0'))
-		return FALSE;
-	return TRUE;	/*strings are matched*/
-}
-

@@ -22,8 +22,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 void show_msg(const int row, const int col, const char *message);
 void clear_msg_line(const int row, const int col);
-void show_settings(const char mode, const enum speed spd, const int row,
-					const int cur_y, const int cur_x);
-char change_mode(char mode);
+void show_settings(const enum speed spd, const int row);
 
 #endif

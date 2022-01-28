@@ -38,19 +38,9 @@ void clear_msg_line(const int row, const int col)
 		mvaddch(row-1, j, empty_char);
 }
 
-void show_settings(const char mode, const enum speed spd, const int row,
-					const int cur_y, const int cur_x)
+void show_settings(const enum speed spd, const int row)
 {
 	attrset(COLOR_PAIR(cp_rb));
-	mvprintw(row-msgboxheight, 0, "Mode: %c | Speed: %d ", mode, spd);
+	mvprintw(row-msgboxheight, 0, _("Speed: %d "), spd);
 	attroff(COLOR_PAIR(cp_rb));
-	move(cur_y, cur_x);
-}
-
-char change_mode(char mode)
-{
-	if(mode == ed_mode)
-		return sim_mode;
-	else
-		return ed_mode;
 }

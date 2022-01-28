@@ -28,8 +28,10 @@ void render_result(cell **first, enum speed spd, const int row, const int col)
 {
 	curs_set(0);
 	if(spd != 0) {
+		show_msg(row, col, _("Simulation. SPACE - stop"));
 		timeout(timeout_min/spd);	/*set rendering speed*/
 		automatic_rendering(first, row, col);
+		clear_msg_line(row, col);
 	}
 	else
 		render_one_step(first, row, col);

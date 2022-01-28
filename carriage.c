@@ -65,6 +65,9 @@ enum key_value check_key(const int c)
 	if(c == KEY_UP || c == key_up || c == KEY_DOWN || c == key_down ||
 	   c == KEY_LEFT || c == key_left || c == KEY_RIGHT || c == key_right)
 		return mv;
+	else if(c == key_up_b || c == key_down_b ||
+			c == key_left_b || c == key_right_b)
+		return bmv;
 	else if(c == key_enter)
 		return add;
 	else if(c == key_escape)
@@ -83,5 +86,13 @@ enum key_value check_key(const int c)
 		return write;
 	else if(c == key_read)
 		return read;
+	else if(c == key_pattern)
+		return pattern;
+	else if(c == key_pattlist)
+		return pattlist;
+	else if(c == key_manual)
+		return manual;
+	else if(c == key_first)
+		return mvtofirst;
 	return -1;
 }

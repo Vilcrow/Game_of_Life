@@ -17,17 +17,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 --------------------------------------------------------------------------------
 */
 
-#ifndef PREPARATION_H_SENTRY
-#define PREPARATION_H_SENTRY
+#ifndef INTERFACE_H_SENTRY
+#define INTERFACE_H_SENTRY
 
-void preparate_env(cell **next, cell **first, const int row, const int col);
-void add_env(cell **next, cell *first, cell *tmp, const int row, const int col);
-enum status is_viable(cell *first, cell *tmp, const int row, const int col);
-enum status get_status(cell *first, const int y, const int x);
-void create_new_generation(cell **next, cell **first,
+
+void input_processing();
+void zeroize_curyx(int *cur_y, int *cur_x);
+void case_add(cell **current, const int cur_y, const int cur_x);
+void case_run(cell **current, const enum speed spd);
+void case_make_zero_current(cell **current, cell *zero,
 							const int row, const int col);
-void clear_list(cell **first);
-void update_generation_num(cell *first);
-void show_manual(const int row, const int col);
+void case_clear_screen(cell **current, const int row, const int col);
 
 #endif

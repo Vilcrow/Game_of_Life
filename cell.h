@@ -31,5 +31,7 @@ char will_added(cell *first, const int row, const int col,
 				const int y, const int x);
 void show_cells(cell *first, const int row, const int col);
 void copy_list(cell **to, cell *from);
+void move_all_cells(const int row, const int col, const char c, cell **current);
+void move_to_first_cell(cell *first, int *cur_y, int *cur_x);
 
 #endif

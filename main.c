@@ -26,6 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "msgbox.h"
 #include "preparation.h"
 #include "renderer.h"
+#include "interface.h"
 
 void start_curses_mode()
 {
@@ -35,22 +36,11 @@ void start_curses_mode()
 	noecho();
 }
 
-int main(int argc, char **argv)
+int main()
 {
-	int cur_y = 0;
-	int cur_x = 0;
 	int row, col;
-	int c;
-	char mode = ed_mode;
-	enum speed spd = spd_zero;
-	enum key_value key;
-	char path[pathmaxlen];
-	cell *cell_zero = NULL;
-	cell *cell_current = NULL;
 	start_curses_mode();
 	getmaxyx(stdscr, row, col);
-	if(argc > 1)
-		check_command_line_arg(argc, argv, &cell_current, row, col);
 	if(!has_colors()) {
 		show_msg(row, col, _("Your terminal don't support colors"));
 	}
@@ -58,77 +48,7 @@ int main(int argc, char **argv)
 		start_color();
 		set_color_pairs();
 	}
-	show_msg(row, col, _("ENTER - add/remove a cell | 'r' - run the simulation"));
-	show_settings(mode, spd, row, cur_y, cur_x);
-	while((c = getch()) != key_escape) {
-		key = check_key(c);
-		switch(key) {
-		case mv:
-			move_carriage(row, col, c, &cur_y, &cur_x);
-			break;
-		case add:
-			if(FALSE == is_in_list(cell_current, cur_y, cur_x)) {
-				add_cell(&cell_current, cur_y, cur_x, 0, alive);
-				show_cell(cur_y, cur_x);
-			}
-			else {
-				rm_cell(&cell_current, cur_y, cur_x);
-				hide_cell(cur_y, cur_x);
-			}
-			break;
-		case run:
-			if(cell_current == NULL) {
-				show_msg(row, col, _("Initial conditions aren't set"));
-				move(cur_y, cur_x);
-			}
-			else {
-				show_msg(row, col, _("Simulation | 'SPACE' - stop the simulation"));
-				mode = change_mode(mode);
-				show_settings(mode, spd, row, cur_y, cur_x);
-				render_result(&cell_current, spd, row, col);
-				mode = change_mode(mode);
-				cur_y = 0;
-				cur_x = 0;
-				show_msg(row, col, _("ENTER - add/remove a cell | 'r' - run the simulation"));
-				show_settings(mode, spd, row, cur_y, cur_x);
-				move(0, 0);
-			}
-			break;
-		case clrscr:
-			clear_list(&cell_current);
-			clear_field(row, col);
-			cur_y = 0;
-			cur_x = 0;
-			move(0, 0);
-			break;
-		case mkzc:	/*make the cell_zero current*/
-			copy_list(&cell_current, cell_zero);
-			show_cells(cell_current, row, col);
-			cur_y = 0;
-			cur_x = 0;
-			move(0, 0);
-			break;
-		case svcl:	/*save current list to cell_zero*/
-			copy_list(&cell_zero, cell_current);
-			break;
-		case speed:
-			++spd;
-			if(spd > spd_max)
-				spd = spd_zero;
-			show_settings(mode, spd, row, cur_y, cur_x);
-			break;
-		case write:
-			write_to_file(cell_current, row, col);
-			break;
-		case read:
-			get_path(path, row, col);
-			read_from_file(&cell_current, path, row, col);
-			show_cells(cell_current, row, col);
-			break;
-		default:
-			break;
-		}
-	}
+	input_processing();
 	endwin();
 	return 0;
 }

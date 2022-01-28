@@ -166,7 +166,8 @@ void show_cells(cell *first, const int row, const int col)
 	while(tmp != NULL) {
 		cp = get_color_pair(tmp->gen);
 		attrset(COLOR_PAIR(cp));
-		mvaddch(tmp->y, tmp->x, cell_char);
+		if(is_visible(row, col, tmp->y, tmp->x))
+			mvaddch(tmp->y, tmp->x, cell_char);
 		attroff(COLOR_PAIR(cp));
 		tmp = tmp->next;
 	}
@@ -183,4 +184,42 @@ void copy_list(cell **to, cell *from)
 		add_cell(to, tmp->y, tmp->x, tmp->gen, tmp->st);
 		tmp = tmp->next;
 	}	
+}
+
+void move_all_cells(const int row, const int col, const char c, cell **current)
+{
+	cell *tmp = *current;
+	int dy, dx;
+	switch(c) {
+	case key_up_b:
+		dy = -1;
+		dx = 0;
+		break;
+	case key_down_b:
+		dy = 1;
+		dx = 0;
+		break;
+	case key_left_b:
+		dy = 0;
+		dx = -1;
+		break;
+	case key_right_b:
+		dy = 0;
+		dx = 1;
+		break;
+	}
+	while(tmp != NULL) {
+		tmp->y += dy;
+		tmp->x += dx;
+		tmp = tmp->next;
+	}
+}
+
+void move_to_first_cell(cell *first, int *cur_y, int *cur_x)
+{
+	if(first != NULL) {
+		*cur_y = first->y;
+		*cur_x = first->x;
+		move(*cur_y, *cur_x);
+	}
 }

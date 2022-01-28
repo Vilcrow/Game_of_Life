@@ -29,9 +29,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 enum { help_char    = 'h'  };
 enum { cell_char    = 'o'  };
 enum { empty_char   = ' '  };
-enum { ed_mode      = 'E'  };
-enum { sim_mode     = 'S'  };
 
+enum { key_first    = 'f'  };
+enum { key_up_b     = 'K'  };
+enum { key_down_b   = 'J'  };
+enum { key_left_b   = 'H'  };
+enum { key_right_b  = 'L'  };
+enum { key_manual   = 'm'  };
+enum { key_pattlist = 'P'  };
+enum { key_pattern  = 'p'  };
 enum { key_write    = 'W'  };
 enum { key_read     = 'R'  };
 enum { key_up       = 'k'  };
@@ -54,13 +60,12 @@ enum { timeout_min  = 300  };
 enum status
      { dead, alive };
 enum key_value
-     { mv, add, run, esc, clrscr, mkzc, speed, svcl, write, read};
+     { mv, add, run, esc, clrscr, mkzc, speed, svcl, write, read, manual,
+       pattern, pattlist, bmv, mvtofirst };
 enum speed
      { spd_zero, spd_one, spd_two, spd_three, spd_four, spd_five, spd_max };
 enum color_pairs
      { cp_wb, cp_yb, cp_gb, cp_cb, cp_bb, cp_mb, cp_rb };
-enum clargv
-	 { help, man, pattern, file };
 
 typedef struct one_cell {
 	int y;
