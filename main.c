@@ -1,7 +1,7 @@
 /*
 Game of Life
 
-Copyright (C) 2022 S.V.I 'Vilcrow', <svi@vilcrow.net>
+Copyright (C) 2022-2023 S.V.I 'Vilcrow', <svi@vilcrow.net>
 --------------------------------------------------------------------------------
 LICENCE:
 This program is free software: you can redistribute it and/or modify
